@@ -1,9 +1,18 @@
-"""Temporary scratch script to verify Settings loads correctly."""
+from atlas.config.logging import configure_logging
+from atlas.utils.logger import logger
 
-from atlas.config import Settings
+configure_logging()
 
-settings = Settings()
+logger.info(
+    "application_started",
+    version="0.1.0",
+)
 
-print(settings)
-print(settings.atlas_provider)
-print(settings.ollama_model)
+logger.info(
+    "provider_selected",
+    provider="ollama",
+)
+
+logger.warning(
+    "api_key_missing",
+)

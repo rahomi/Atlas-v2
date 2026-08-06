@@ -15,3 +15,6 @@ class Settings(BaseSettings):
 
     openai_api_key: str = ""
     openai_model: str = "gpt-5"
+
+    log_level: str = "INFO"
+    log_json: bool = False

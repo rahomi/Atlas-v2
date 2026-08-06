@@ -12,6 +12,7 @@ Atlas v2 is an AI agent runtime built with Python 3.13. It provides a modular fo
 - **Config** — Configuration management
 - **Prompts** — Prompt templates
 - **Utils** — Shared utilities
+- **Logging** — Structured logging via `structlog`
 
 ## Requirements
 
@@ -38,6 +39,52 @@ Outputs:
 
 ```
 Atlas v2 (version 0.1.0)
+```
+
+## Logging
+
+Atlas v2 uses [structlog](https://www.structlog.org/) for structured, key-value logging.
+
+### Configure logging at startup
+
+```python
+from atlas.config import configure_logging
+
+configure_logging()
+```
+
+### Get a named logger
+
+```python
+from atlas.utils import get_logger
+
+logger = get_logger("my_component")
+
+logger.info("event_occurred", key="value", count=42)
+```
+
+### Use the module-level default logger
+
+```python
+from atlas.utils.logger import logger
+
+logger.warning("api_key_missing")
+```
+
+### Logging settings
+
+The following environment variables control logging behavior (defined in `atlas.config.Settings`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LOG_LEVEL` | `INFO` | Minimum log level to emit |
+| `LOG_JSON` | `false` | Emit logs as JSON instead of pretty-printed console output |
+
+Set them in your `.env` file or environment:
+
+```bash
+LOG_LEVEL=DEBUG
+LOG_JSON=true
 ```
 
 ## Project Structure
