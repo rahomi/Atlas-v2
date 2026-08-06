@@ -1,3 +1,7 @@
-"""Models - Data models and schemas."""
+from .message import Message
+from .roles import MessageRole
 
-from __future__ import annotations
+__all__ = [
+    "Message",
+    "MessageRole",
+]
