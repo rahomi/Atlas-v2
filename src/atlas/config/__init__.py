@@ -1,3 +1,3 @@
-"""Config - Configuration management."""
+from .settings import Settings
 
-from __future__ import annotations
+__all__ = ["Settings"]
