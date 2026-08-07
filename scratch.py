@@ -1,18 +1,36 @@
-from atlas.config.logging import configure_logging
-from atlas.utils.logger import logger
+import asyncio
 
-configure_logging()
-
-logger.info(
-    "application_started",
-    version="0.1.0",
+from atlas.models import (
+    Conversation,
+    Message,
+    MessageRole,
 )
+from atlas.providers.ollama import OllamaModelClient
 
-logger.info(
-    "provider_selected",
-    provider="ollama",
-)
 
-logger.warning(
-    "api_key_missing",
-)
+async def main():
+
+    conversation = Conversation()
+
+    conversation = conversation.append(
+        Message(
+            role=MessageRole.USER,
+            content="What is 25 multiplied by 48?",
+        )
+    )
+
+    client = OllamaModelClient(
+        model="qwen3:latest"
+    )
+
+    response = await client.chat(
+        conversation
+    )
+
+    print()
+    print("MODEL RESPONSE:")
+    print(response.content)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 from atlas.models import (
     Conversation,
     Message,
     MessageRole,
 )
-from atlas.runtime.contracts import ModelClient, ToolRegistry
-from atlas.runtime.model_response import ModelResponse
+from atlas.runtime.contracts import ModelClient
+from atlas.tools.registry import ToolRegistry
 
 
 class AgentRuntime:
@@ -20,26 +22,17 @@ class AgentRuntime:
     async def run(
         self,
         conversation: Conversation,
-    ) -> ModelResponse:
+    ):
+        current = conversation
 
         while True:
 
             response = await self._model.chat(
-                conversation
+                current
             )
 
-            if not response.has_tool_calls:
+            if not response.tool_calls:
                 return response
-
-            # Only add an assistant message when
-            # the model actually produced text.
-            if response.content:
-                conversation = conversation.append(
-                    Message(
-                        role=MessageRole.ASSISTANT,
-                        content=response.content,
-                    )
-                )
 
             for tool_call in response.tool_calls:
 
@@ -51,14 +44,21 @@ class AgentRuntime:
                     tool_call
                 )
 
-                conversation = conversation.append(
+                current = current.append(
+                    Message(
+                        role=MessageRole.ASSISTANT,
+                        content=(
+                            response.content
+                            or "Tool call requested."
+                        ),
+                        tool_calls=(tool_call,),
+                    )
+                )
+
+                current = current.append(
                     Message(
                         role=MessageRole.TOOL,
-                        content=(
-                            result.output
-                            if result.success
-                            else result.error
-                            or "Tool failed"
-                        ),
+                        content=result.output,
+                        tool_call_id=tool_call.id,
                     )
                 )
