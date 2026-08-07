@@ -1,7 +1,7 @@
 from atlas.models import Conversation, MessageRole
 from atlas.runtime.contracts import ModelClient
 from atlas.runtime.model_response import ModelResponse
-from atlas.runtime.tool_call import ToolCall
+from atlas.models import ToolCall
 
 
 class FakeToolCallingModel(ModelClient):

@@ -5,27 +5,31 @@ from atlas.models import (
     Message,
     MessageRole,
 )
-from atlas.providers.fake import FakeModelClient
+from atlas.providers.tool_fake import FakeToolCallingModel
 from atlas.runtime import AgentRuntime
-from atlas.tools import ToolRegistry
+from atlas.tools import CalculatorTool, ToolRegistry
 
 
 @pytest.mark.asyncio
-async def test_agent_returns_response():
+async def test_agent_executes_tool_and_returns_final_answer():
 
     conversation = Conversation()
 
     conversation = conversation.append(
         Message(
             role=MessageRole.USER,
-            content="Hello!",
+            content="Calculate 25 times 48.",
         )
     )
 
     tools = ToolRegistry()
 
+    tools.register(
+        CalculatorTool()
+    )
+
     runtime = AgentRuntime(
-        model=FakeModelClient(),
+        model=FakeToolCallingModel(),
         tools=tools,
     )
 
@@ -33,5 +37,5 @@ async def test_agent_returns_response():
         conversation
     )
 
-    assert response.content == "Echo: Hello!"
+    assert response.content == "The answer is 1200."
     assert response.has_tool_calls is False

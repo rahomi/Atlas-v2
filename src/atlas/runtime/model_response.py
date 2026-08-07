@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from atlas.runtime.tool_call import ToolCall
+from atlas.models import ToolCall
 
 
 @dataclass(frozen=True)

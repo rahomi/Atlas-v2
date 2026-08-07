@@ -1,6 +1,5 @@
 import pytest
-
-from atlas.runtime.tool_call import ToolCall
+from atlas.models import ToolCall
 from atlas.tools import CalculatorTool
 
 

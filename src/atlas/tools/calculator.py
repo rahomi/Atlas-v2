@@ -1,4 +1,4 @@
-from atlas.runtime.tool_call import ToolCall
+from atlas.models import ToolCall
 from atlas.runtime.tool_result import ToolResult
 from atlas.tools.schemas import CalculatorArguments
 

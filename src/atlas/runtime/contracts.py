@@ -4,7 +4,7 @@ from typing import Any, Protocol
 
 from atlas.models import Conversation
 from atlas.runtime.model_response import ModelResponse
-from atlas.runtime.tool_call import ToolCall
+from atlas.models import ToolCall
 
 from .tool_result import ToolResult
 
