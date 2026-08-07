@@ -1,3 +1,9 @@
-"""Tools - Tool definitions and registry."""
+from .calculator import CalculatorTool
+from .registry import ToolRegistry
+from .schemas import CalculatorArguments
 
-from __future__ import annotations
+__all__ = [
+    "CalculatorArguments",
+    "CalculatorTool",
+    "ToolRegistry",
+]

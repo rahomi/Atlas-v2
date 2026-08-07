@@ -4,6 +4,8 @@ from typing import Any, Protocol
 
 from atlas.models import Conversation
 
+from .tool_result import ToolResult
+
 
 class ModelClient(Protocol):
     """
@@ -16,7 +18,27 @@ class ModelClient(Protocol):
     ) -> str:
         ...
 
+
+class Tool(Protocol):
+    """
+    Contract for every executable tool.
+    """
+
+    @property
+    def name(self) -> str:
+        ...
+
+    async def execute(
+        self,
+        arguments: dict[str, Any],
+    ) -> ToolResult:
+        ...
+
+
 class ToolRegistry(Protocol):
+    """
+    Registry responsible for managing tools.
+    """
 
     def register(
         self,
@@ -30,23 +52,14 @@ class ToolRegistry(Protocol):
     ) -> Tool:
         ...
 
-
-class Tool(Protocol):
-
-    @property
-    def name(self) -> str:
+    def list(self) -> list[str]:
         ...
-
-    async def execute(
-        self,
-        arguments: dict[str, Any],
-    ) -> Any:
-        ...
-
-    from atlas.models import Conversation
 
 
 class Memory(Protocol):
+    """
+    Contract for conversation persistence.
+    """
 
     async def load(
         self,
