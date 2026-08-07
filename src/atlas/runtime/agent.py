@@ -59,7 +59,6 @@ class AgentRuntime:
 
         current = conversation
 
-        # Record the assistant's tool request.
         current = current.append(
             Message(
                 role=MessageRole.ASSISTANT,
@@ -80,6 +79,12 @@ class AgentRuntime:
 
                 result = await tool.execute(
                     tool_call
+                )
+
+            except KeyError as exc:
+                result = ToolResult.fail(
+                    error=str(exc),
+                    tool_call_id=str(tool_call.id),
                 )
 
             except Exception as exc:
