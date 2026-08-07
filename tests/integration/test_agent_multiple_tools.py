@@ -7,6 +7,7 @@ from atlas.models import (
     ToolCall,
 )
 from atlas.runtime.agent import AgentRuntime
+from atlas.runtime.contracts import Tool
 from atlas.runtime.model_response import ModelResponse
 from atlas.runtime.tool_result import ToolResult
 from atlas.tools.registry import ToolRegistry
@@ -53,9 +54,10 @@ class MultipleToolModel:
         )
 
     async def chat(
-        self,
-        conversation: Conversation,
-    ) -> ModelResponse:
+            self,
+            conversation: Conversation,
+            tools: tuple[Tool, ...] = (),
+        ) -> ModelResponse:
 
         self.conversations.append(conversation)
         self.calls += 1

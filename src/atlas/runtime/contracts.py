@@ -17,59 +17,23 @@ class ModelClient(Protocol):
     async def chat(
         self,
         conversation: Conversation,
+        tools: tuple[Tool, ...] = (),
     ) -> ModelResponse:
         ...
 
 
 class Tool(Protocol):
-    """
-    Contract for every executable tool.
-    """
 
     @property
     def name(self) -> str:
+        ...
+
+    @property
+    def definition(self) -> dict[str, Any]:
         ...
 
     async def execute(
         self,
         tool_call: ToolCall,
     ) -> ToolResult:
-        ...
-
-class ToolRegistry(Protocol):
-    """
-    Registry responsible for managing tools.
-    """
-
-    def register(
-        self,
-        tool: Tool,
-    ) -> None:
-        ...
-
-    def get(
-        self,
-        name: str,
-    ) -> Tool:
-        ...
-
-    def list(self) -> list[str]:
-        ...
-
-
-class Memory(Protocol):
-    """
-    Contract for conversation persistence.
-    """
-
-    async def load(
-        self,
-        conversation_id: str,
-    ) -> Conversation:
-        ...
-
-    async def save(
-        self,
-        conversation: Conversation,
-    ) -> None:
         ...

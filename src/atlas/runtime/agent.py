@@ -36,7 +36,11 @@ class AgentRuntime:
         for _ in range(self._max_iterations):
 
             response = await self._model.chat(
-                current
+                current,
+                tools=tuple(
+                    self._tools.get(name)
+                    for name in self._tools.list()
+                ),
             )
 
             if not response.tool_calls:

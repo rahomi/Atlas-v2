@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import httpx
 
-from atlas.models import Conversation
+from atlas.models import Conversation, ToolCall
+from atlas.runtime.contracts import Tool
 from atlas.runtime.model_response import ModelResponse
 
 
@@ -19,12 +20,12 @@ class OllamaModelClient:
     async def chat(
         self,
         conversation: Conversation,
+        tools=(),
     ) -> ModelResponse:
 
         messages = []
 
         for message in conversation.messages:
-
             if message.role.value == "user":
                 messages.append(
                     {
@@ -49,14 +50,22 @@ class OllamaModelClient:
                     }
                 )
 
+        ollama_tools = [
+            {
+                "type": "function",
+                "function": tool.definition,
+            }
+            for tool in tools
+        ]
+
         payload = {
             "model": self._model,
             "messages": messages,
             "stream": False,
+            "tools": ollama_tools,
         }
 
         async with httpx.AsyncClient() as client:
-
             response = await client.post(
                 f"{self._host}/api/chat",
                 json=payload,
@@ -67,9 +76,19 @@ class OllamaModelClient:
 
             data = response.json()
 
-        content = data["message"]["content"]
+        message = data["message"]
+
+        content = message.get("content") or ""
+
+        tool_calls = tuple(
+            ToolCall(
+                tool_name=call["function"]["name"],
+                arguments=call["function"].get("arguments", {}),
+            )
+            for call in message.get("tool_calls", [])
+        )
 
         return ModelResponse(
             content=content,
-            tool_calls=(),
+            tool_calls=tool_calls,
         )

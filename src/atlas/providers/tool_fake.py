@@ -1,5 +1,5 @@
 from atlas.models import Conversation, MessageRole
-from atlas.runtime.contracts import ModelClient
+from atlas.runtime.contracts import ModelClient, Tool
 from atlas.runtime.model_response import ModelResponse
 from atlas.models import ToolCall
 
@@ -9,6 +9,7 @@ class FakeToolCallingModel(ModelClient):
     async def chat(
         self,
         conversation: Conversation,
+        tools: tuple[Tool, ...] = (),
     ) -> ModelResponse:
 
         if conversation.messages[-1].role == MessageRole.TOOL:

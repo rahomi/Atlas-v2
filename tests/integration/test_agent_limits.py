@@ -1,5 +1,6 @@
 from atlas.models import Conversation, Message, MessageRole
 from atlas.runtime.agent import AgentRuntime
+from atlas.runtime.contracts import Tool
 from atlas.runtime.model_response import ModelResponse
 from atlas.tools import CalculatorTool, ToolRegistry
 from atlas.models import ToolCall
@@ -10,6 +11,7 @@ class LoopingModelClient:
     async def chat(
         self,
         conversation: Conversation,
+        tools: tuple[Tool, ...] = (),
     ) -> ModelResponse:
 
         return ModelResponse(

@@ -1,3 +1,5 @@
+from typing import Any
+
 from atlas.models import ToolCall
 from atlas.runtime.tool_result import ToolResult
 from atlas.tools.schemas import CalculatorArguments
@@ -31,3 +33,24 @@ class CalculatorTool:
             str(result),
             tool_call_id=tool_call.id,
         )
+    
+    @property
+    def definition(self) -> dict[str, Any]:
+        return {
+            "name": "calculator",
+            "description": "Multiply two numbers.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "a": {
+                        "type": "number",
+                        "description": "The first number.",
+                    },
+                    "b": {
+                        "type": "number",
+                        "description": "The second number.",
+                    },
+                },
+                "required": ["a", "b"],
+            },
+        }
