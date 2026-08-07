@@ -22,12 +22,12 @@ class CalculatorTool:
         except Exception as exc:
             return ToolResult.fail(
                 str(exc),
-                tool_call_id=str(tool_call.id),
+                tool_call_id=tool_call.id,
             )
 
         result = args.a * args.b
 
         return ToolResult.ok(
             str(result),
-            tool_call_id=str(tool_call.id),
+            tool_call_id=tool_call.id,
         )

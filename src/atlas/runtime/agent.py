@@ -84,13 +84,13 @@ class AgentRuntime:
             except KeyError as exc:
                 result = ToolResult.fail(
                     error=str(exc),
-                    tool_call_id=str(tool_call.id),
+                    tool_call_id=tool_call.id,
                 )
 
             except Exception as exc:
                 result = ToolResult.fail(
                     error=f"Tool error: {exc}",
-                    tool_call_id=str(tool_call.id),
+                    tool_call_id=tool_call.id,
                 )
 
             current = current.append(
