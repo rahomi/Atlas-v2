@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, Protocol
 
 from atlas.models import Conversation
+from atlas.runtime.model_response import ModelResponse
 
 from .tool_result import ToolResult
 
@@ -15,7 +16,7 @@ class ModelClient(Protocol):
     async def chat(
         self,
         conversation: Conversation,
-    ) -> str:
+    ) -> ModelResponse:
         ...
 
 

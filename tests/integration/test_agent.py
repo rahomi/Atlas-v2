@@ -17,7 +17,7 @@ async def test_agent_returns_response():
     conversation = conversation.append(
         Message(
             role=MessageRole.USER,
-            content="Hello!"
+            content="Hello!",
         )
     )
 
@@ -29,4 +29,5 @@ async def test_agent_returns_response():
         conversation
     )
 
-    assert response == "Echo: Hello!"
+    assert response.content == "Echo: Hello!"
+    assert response.has_tool_calls is False

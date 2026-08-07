@@ -1,5 +1,6 @@
 from atlas.models import Conversation
 from atlas.runtime.contracts import ModelClient
+from atlas.runtime.model_response import ModelResponse
 
 
 class FakeModelClient(ModelClient):
@@ -7,8 +8,10 @@ class FakeModelClient(ModelClient):
     async def chat(
         self,
         conversation: Conversation,
-    ) -> str:
+    ) -> ModelResponse:
 
         last = conversation.messages[-1]
 
-        return f"Echo: {last.content}"
+        return ModelResponse(
+            content=f"Echo: {last.content}"
+        )
