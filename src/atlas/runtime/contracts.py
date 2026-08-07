@@ -4,6 +4,7 @@ from typing import Any, Protocol
 
 from atlas.models import Conversation
 from atlas.runtime.model_response import ModelResponse
+from atlas.runtime.tool_call import ToolCall
 
 from .tool_result import ToolResult
 
@@ -31,10 +32,9 @@ class Tool(Protocol):
 
     async def execute(
         self,
-        arguments: dict[str, Any],
+        tool_call: ToolCall,
     ) -> ToolResult:
         ...
-
 
 class ToolRegistry(Protocol):
     """

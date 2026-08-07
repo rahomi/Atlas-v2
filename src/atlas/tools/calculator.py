@@ -1,3 +1,4 @@
+from atlas.runtime.tool_call import ToolCall
 from atlas.runtime.tool_result import ToolResult
 from atlas.tools.schemas import CalculatorArguments
 
@@ -10,21 +11,23 @@ class CalculatorTool:
 
     async def execute(
         self,
-        arguments: dict,
+        tool_call: ToolCall,
     ) -> ToolResult:
 
         try:
             args = CalculatorArguments.model_validate(
-                arguments
+                tool_call.arguments
             )
 
         except Exception as exc:
             return ToolResult.fail(
-                f"Invalid arguments: {exc}"
+                str(exc),
+                tool_call_id=str(tool_call.id),
             )
 
         result = args.a * args.b
 
         return ToolResult.ok(
-            str(result)
+            str(result),
+            tool_call_id=str(tool_call.id),
         )

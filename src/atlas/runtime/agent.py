@@ -48,7 +48,7 @@ class AgentRuntime:
                 )
 
                 result = await tool.execute(
-                    tool_call.arguments
+                    tool_call
                 )
 
                 conversation = conversation.append(
