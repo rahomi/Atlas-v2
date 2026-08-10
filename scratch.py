@@ -6,6 +6,8 @@ from atlas.models import (
     MessageRole,
 )
 from atlas.providers.ollama import OllamaModelClient
+from atlas.runtime.agent import AgentRuntime
+from atlas.tools import CalculatorTool, ToolRegistry
 
 
 async def main():
@@ -15,15 +17,26 @@ async def main():
     conversation = conversation.append(
         Message(
             role=MessageRole.USER,
-            content="What is 25 multiplied by 48?",
+            content=(
+                "Use the calculator tool to calculate "
+                "1234567 × 89123. Do not calculate it yourself."
+            ),
         )
     )
 
-    client = OllamaModelClient(
+    model = OllamaModelClient(
         model="qwen3:latest"
     )
 
-    response = await client.chat(
+    tools = ToolRegistry()
+    tools.register(CalculatorTool())
+
+    runtime = AgentRuntime(
+        model=model,
+        tools=tools,
+    )
+
+    response = await runtime.run(
         conversation
     )
 

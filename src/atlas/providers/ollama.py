@@ -62,6 +62,7 @@ class OllamaModelClient:
             "model": self._model,
             "messages": messages,
             "stream": False,
+            "think": False,
             "tools": ollama_tools,
         }
 

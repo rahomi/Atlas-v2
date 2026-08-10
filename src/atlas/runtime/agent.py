@@ -81,8 +81,17 @@ class AgentRuntime:
                     tool_call.tool_name
                 )
 
+                print(
+                    f"[TOOL CALL] {tool_call.tool_name}"
+                    f" arguments={tool_call.arguments}"
+                )
+
                 result = await tool.execute(
                     tool_call
+                )
+
+                print(
+                    f"[TOOL RESULT] {result.output}"
                 )
 
             except KeyError as exc:
