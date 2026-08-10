@@ -27,7 +27,7 @@ class CalculatorTool:
                 tool_call_id=tool_call.id,
             )
 
-        result = args.a * args.b
+        result = int(args.a * args.b)
 
         return ToolResult.ok(
             str(result),

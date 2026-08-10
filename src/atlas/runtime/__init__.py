@@ -1,3 +1,3 @@
-from .agent import AgentRuntime
+from .agent import AgentRuntime, Agent
 
-__all__ = ["AgentRuntime"]
+__all__ = ["AgentRuntime", "Agent"]

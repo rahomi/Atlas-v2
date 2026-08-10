@@ -2,10 +2,10 @@ from pydantic import BaseModel, Field
 
 
 class CalculatorArguments(BaseModel):
-    a: float = Field(
+    a: int = Field(
         description="First number"
     )
 
-    b: float = Field(
+    b: int = Field(
         description="Second number"
     )

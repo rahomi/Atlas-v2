@@ -26,29 +26,39 @@ class OllamaModelClient:
         messages = []
 
         for message in conversation.messages:
-            if message.role.value == "user":
-                messages.append(
-                    {
-                        "role": "user",
-                        "content": message.content,
-                    }
-                )
-
+            if message.role.value == "system":
+                messages.append({
+                    "role": "system",
+                    "content": message.content,
+                })
+            elif message.role.value == "user":
+                messages.append({
+                    "role": "user",
+                    "content": message.content,
+                })
             elif message.role.value == "assistant":
-                messages.append(
-                    {
-                        "role": "assistant",
-                        "content": message.content or "",
-                    }
-                )
-
+                msg = {
+                    "role": "assistant",
+                    "content": message.content or "",
+                }
+                # IMPORTANT: Send back the tool_calls the assistant made!
+                if message.tool_calls:
+                    msg["tool_calls"] = [
+                        {
+                            "type": "function",
+                            "function": {
+                                "name": call.tool_name,
+                                "arguments": call.arguments,
+                            }
+                        }
+                        for call in message.tool_calls
+                    ]
+                messages.append(msg)
             elif message.role.value == "tool":
-                messages.append(
-                    {
-                        "role": "tool",
-                        "content": message.content or "",
-                    }
-                )
+                messages.append({
+                    "role": "tool",
+                    "content": message.content or "",
+                })
 
         ollama_tools = [
             {
@@ -76,7 +86,9 @@ class OllamaModelClient:
             response.raise_for_status()
 
             data = response.json()
-
+        
+        print(f"\n[RAW OLLAMA RESPONSE]: {data}\n")
+        
         message = data["message"]
 
         content = message.get("content") or ""
